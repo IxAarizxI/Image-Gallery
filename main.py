@@ -15,24 +15,24 @@ class ImageGallery:
         self.root.attributes('-fullscreen', True)  # Start in fullscreen mode
 
         # Variables
-        self.image_paths = []
-        self.current_index = 0
-        self.scale = 1.0
-        self.offset_x = 0
-        self.offset_y = 0
-        self.is_dragging = False
-        self.start_x = 0
-        self.start_y = 0
-        self.slideshow_active = False
+        self.image_paths = [] #list of image file paths
+        self.current_index = 0 #track the curretly displayed image
+        self.scale = 1.0 #zoom level
+        self.offset_x = 0 #horizontal movement offset
+        self.offset_y = 0 #vertical
+        self.is_dragging = False # track if the image is being dragged
+        self.start_x = 0 #store staring x position for dragging
+        self.start_y = 0 #for y position
+        self.slideshow_active = False# track slideshow mode
 
         # UI
         self.canvas = tk.Canvas(root, bg="black")
-        self.canvas.pack(fill=tk.BOTH, expand=True)
+        self.canvas.pack(fill=tk.BOTH, expand=True) #Makes the canvas fill the whole window
 
         # Add Import Button
         self.buttonImport = tk.Button(root, 
                                       text="Import Image Folder", 
-                                      command=self.load_folder)
+                                      command=self.load_folder)#calls this when we click it
         self.buttonImport.pack(padx=20, pady=20)
 
         # Bindings
@@ -46,8 +46,7 @@ class ImageGallery:
         self.root.bind("<B1-Motion>", self.pan_image)
         self.root.bind("<space>", self.toggle_slideshow)
         
-        # Load images
-        self.load_folder()
+    
 
     def load_folder(self):
         folder_selected = filedialog.askdirectory()
@@ -55,7 +54,7 @@ class ImageGallery:
             self.image_paths = [os.path.join(folder_selected, f) for f in os.listdir(folder_selected)
                                 if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
             self.current_index = 0
-            if self.image_paths:
+            if self.image_paths:#stores all images in it
                 self.show_image()
 
     def show_image(self):
@@ -63,8 +62,8 @@ class ImageGallery:
             return
         
         img_path = self.image_paths[self.current_index]
-        img = cv2.imread(img_path)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = cv2.imread(img_path)# load image using opencv
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)#converts bgr to rgb bz it wants rgb
 
         # Resize while maintaining aspect ratio
         screen_w, screen_h = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
@@ -80,28 +79,28 @@ class ImageGallery:
         self.tk_image = ImageTk.PhotoImage(img_pil)
         self.canvas.create_image(screen_w // 2, screen_h // 2, anchor="center", image=self.tk_image)
 
-    def next_image(self, event=None):
+    def next_image(self, event=None): #moves to the next image 
         if self.image_paths:
             self.current_index = (self.current_index + 1) % len(self.image_paths)
-            self.reset_view()
+            self.reset_view() #resets zoom position
             self.show_image()
 
-    def prev_image(self, event=None):
+    def prev_image(self, event=None):# moves to the previous image.
         if self.image_paths:
             self.current_index = (self.current_index - 1) % len(self.image_paths)
             self.reset_view()
             self.show_image()
 
-    def zoom(self, event):
+    def zoom(self, event): #Zooms in/out when scrolling the mouse wheel.
         factor = 1.1 if event.delta > 0 else 0.9
         self.scale *= factor
         self.show_image()
 
-    def start_pan(self, event):
+    def start_pan(self, event):# starts panning when mouse is pressed.
         self.is_dragging = True
         self.start_x, self.start_y = event.x, event.y
 
-    def pan_image(self, event):
+    def pan_image(self, event):# moves the image while dragging.
         if self.is_dragging:
             self.offset_x += (event.x - self.start_x) // 2
             self.offset_y += (event.y - self.start_y) // 2
@@ -109,27 +108,28 @@ class ImageGallery:
             self.show_image()
 
     def reset_view(self):
-        self.scale = 1.0
-        self.offset_x = 0
+        self.scale = 1.0 #Resets zoom to its original size.
+        self.offset_x = 0 #Moves the image back to its original position
         self.offset_y = 0
 
     def toggle_fullscreen(self, event=None):
         self.root.attributes('-fullscreen', not self.root.attributes('-fullscreen'))
 
-    def toggle_slideshow(self, event=None):
+    def toggle_slideshow(self, event=None): #does slideshow when i hit spacebar
         self.slideshow_active = not self.slideshow_active
         if self.slideshow_active:
             self.run_slideshow()
 
-    def run_slideshow(self):
+    def run_slideshow(self): # switches images every 3 seconds while i hit slideshow
         if self.slideshow_active:
             self.next_image()
-            self.root.after(3000, self.run_slideshow)
+            self.root.after(3000, self.run_slideshow) # switches images every 3 seconds while i hit slideshow
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = ImageGallery(root)
+    root = tk.Tk() #creates the main tkinter window
+    app = ImageGallery(root) #creates a instance of imagegallery class
 
-    root.iconbitmap("./assets/icon.ico")
+    root.iconbitmap("./assets/icon.ico") #Sets the window icon (Windows only).
+
 
     root.mainloop()
