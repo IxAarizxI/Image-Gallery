@@ -29,6 +29,13 @@ class ImageGallery:
         self.canvas = tk.Canvas(root, bg="black")
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
+        # Add Import Button
+        self.buttonImport = tk.Button(root, 
+                                      text="Import Image Folder", 
+                                      command=self.load_folder)
+        self.buttonImport.pack(padx=20, pady=20)
+
+        # Bindings
         self.root.bind("<Left>", self.prev_image)
         self.root.bind("<Right>", self.next_image)
         self.root.bind("<Escape>", lambda e: root.quit())
@@ -38,7 +45,7 @@ class ImageGallery:
         self.root.bind("<ButtonPress-1>", self.start_pan)
         self.root.bind("<B1-Motion>", self.pan_image)
         self.root.bind("<space>", self.toggle_slideshow)
-
+        
         # Load images
         self.load_folder()
 
