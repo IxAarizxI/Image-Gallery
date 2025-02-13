@@ -122,4 +122,7 @@ class ImageGallery:
 if __name__ == "__main__":
     root = tk.Tk()
     app = ImageGallery(root)
+
+    root.iconbitmap("./assets/icon.ico")
+
     root.mainloop()
