@@ -46,8 +46,6 @@ class ImageGallery:
         self.root.bind("<B1-Motion>", self.pan_image)
         self.root.bind("<space>", self.toggle_slideshow)
         
-    
-
     def load_folder(self):
         folder_selected = filedialog.askdirectory()
         if folder_selected:
