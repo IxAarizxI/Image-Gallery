@@ -29,11 +29,24 @@ class ImageGallery:
         self.canvas = tk.Canvas(root, bg="black")
         self.canvas.pack(fill=tk.BOTH, expand=True) #Makes the canvas fill the whole window
 
-        # Add Import Button
+       # Add Import Button
         self.buttonImport = tk.Button(root, 
                                       text="Import Image Folder", 
-                                      command=self.load_folder)#calls this when we click it
-        self.buttonImport.pack(padx=20, pady=20)
+                                      command=self.load_folder,
+                                      bg="white")
+        self.buttonImport.pack(side=tk.LEFT, padx=20, pady=20, fill=tk.X)
+
+        self.buttonImport = tk.Button(root, 
+                                      text="Next Image", 
+                                      command=self.next_image,
+                                      bg="white")
+        self.buttonImport.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.X)
+
+        self.buttonImport = tk.Button(root, 
+                                      text="Previous Image", 
+                                      command=self.prev_image,
+                                      bg="white")
+        self.buttonImport.pack(side=tk.LEFT, padx=20, pady=20, fill=tk.X)
 
         # Bindings
         self.root.bind("<Left>", self.prev_image)
