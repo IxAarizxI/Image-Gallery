@@ -55,6 +55,7 @@ class ImageGallery:
             if self.image_paths:#stores all images in it
                 self.show_image()
 
+
     def show_image(self):
         if not self.image_paths:
             return
