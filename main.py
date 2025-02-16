@@ -145,7 +145,6 @@ class ImageGallery:
 
 
 if __name__ == "__main__":  # FIXED __name__ # creates the main window and runs the application
-if __name__ == "__main__":
     root = tk.Tk()
     app = ImageGallery(root)
     root.iconbitmap("./assets/icon.ico")
