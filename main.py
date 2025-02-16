@@ -6,6 +6,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 from ctypes import windll
 import subprocess  # Import subprocess to open Image Processor
+import sys  # Added sys module
 
 windll.shcore.SetProcessDpiAwareness(1)  # Improve DPI scaling on Windows
 
@@ -136,9 +137,15 @@ class ImageGallery:
     def open_image_processor(self): # opens another python scrot ( imageprovessro.py)for image editing
         """Opens the Image Processor in a new window."""
         subprocess.Popen(["python", "ImageProcessor.py"])  # Runs ImageProcessor.py
+    def open_image_processor(self):
+        """Opens the Image Processor with the current image."""
+        if self.image_paths:
+            current_img = self.image_paths[self.current_index]
+            subprocess.Popen(["python", "ImageProcessor.py", current_img])
 
 
 if __name__ == "__main__":  # FIXED __name__ # creates the main window and runs the application
+if __name__ == "__main__":
     root = tk.Tk()
     app = ImageGallery(root)
     root.iconbitmap("./assets/icon.ico")
