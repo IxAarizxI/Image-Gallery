@@ -6,12 +6,13 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 from ctypes import windll
 import subprocess  # Import subprocess to open Image Processor
+import sys  # Added sys module
 
 windll.shcore.SetProcessDpiAwareness(1)  # Improve DPI scaling on Windows
 
 
 class ImageGallery:
-    def __init__(self, root):  # FIXED __init__
+    def __init__(self, root):
         self.root = root
         self.root.title("Image Gallery")
         self.root.attributes('-fullscreen', True)
@@ -134,12 +135,14 @@ class ImageGallery:
             self.root.after(3000, self.run_slideshow)
 
     def open_image_processor(self):
-        """Opens the Image Processor in a new window."""
-        subprocess.Popen(["python", "ImageProcessor.py"])  # Runs ImageProcessor.py
+        """Opens the Image Processor with the current image."""
+        if self.image_paths:
+            current_img = self.image_paths[self.current_index]
+            subprocess.Popen(["python", "ImageProcessor.py", current_img])
 
 
-if __name__ == "__main__":  # FIXED __name__
+if __name__ == "__main__":
     root = tk.Tk()
     app = ImageGallery(root)
     root.iconbitmap("./assets/icon.ico")
-    root.mainloop()  # FIXED: Ensure the GUI runs
+    root.mainloop()
